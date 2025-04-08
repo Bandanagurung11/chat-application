@@ -1,6 +1,7 @@
 import User from '../models/user.js';
 import cloudinary from '../config/cloudinary.js';
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req, res) => {
     try {
@@ -85,3 +86,41 @@ export const userDelete = async (req,res)=>{
         res.status(500).json("internal server error");
     }
 };
+
+export const userLogin = async (req,res)=>{
+  if (!req.body.username || !req.body.password) {
+  return res.status(400).json({ message: "Username and password are required" });
+}
+    try {
+  
+      //check if username exist or not
+      const yesUserNameExit = await User.findOne({username:req.body.username});
+      if(!yesUserNameExit){
+        return res.status(404).json({message: "user does not exit"})
+      }
+  
+      //compare user password if user exist
+      console.log(yesUserNameExit.password, "password from db");
+      const passwordMatch = await bcrypt.compare(req.body.password, yesUserNameExit.password )  //1244 and !@241dc
+      if(!passwordMatch){
+        return res.status(401).json({message: "password doesn't match"});
+      }
+  
+      //generate token
+      // var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+      const jwtToken = jwt.sign({username:req.body.username}, "!@E#@fvcnwevw$@$", {expiresIn: '24hr'});
+      return res.status(200).json({
+        message: "login successful",
+        jwtToken: jwtToken,
+        user : yesUserNameExit
+      });
+      
+    } catch (error) {
+      console.log(error,"error");
+      return res.status(500).json({
+        message: "Something went wrong",
+        error: error,
+      });
+
+    }
+}
