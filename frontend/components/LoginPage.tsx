@@ -282,13 +282,13 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className=" cursor-pointer w-full" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Log in"}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
             Do not have an account?{" "}
-            <button type="button" className="text-primary hover:underline" onClick={() => router.push("/signup")}>
+            <button type="button" className="cursor-pointer text-base font-bold text-primary hover:underline" onClick={() => router.push("/signup")}>
               Sign up
             </button>
           </p>

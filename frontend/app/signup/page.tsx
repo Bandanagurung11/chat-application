@@ -1,10 +1,11 @@
+"use client"
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter } from "next/navigation";
 import React, { useState } from 'react'
 
-export default function SignUp() {
+export default function Page() {
     const router = useRouter();
   const [formData, setFormData] = useState({
     username: "",
@@ -29,6 +30,8 @@ export default function SignUp() {
     data.append("username", formData.username);
     data.append("email", formData.email);
     data.append("password", formData.password);
+    data.append("profile", profilePic);
+
     if (profilePic) {
       data.append("profile", profilePic);
     }
@@ -40,7 +43,7 @@ export default function SignUp() {
 
       if (res.status === 201) {
         console.log("User created:", res.data);
-        router.push("/account"); // Redirect after successful signup
+        router.push("/"); // Redirect after successful signup
       }
     } catch (error) {
       if (error.response) {
@@ -51,7 +54,7 @@ export default function SignUp() {
     }
   };
   return (
-    <div>
+    <div  className="flex mt-12 justify-center items-center min-h-[80vh]">
         <div className="border shadow-xl p-6 rounded-md space-y-6">
             <div className="space-y-1">
               <p className="text-lg font-bold">Create an account</p>
@@ -88,7 +91,7 @@ export default function SignUp() {
                <Input type="file" onChange={handleFileChange} />
              </div>
              <div className="flex justify-center">
-               <Button type="submit" onClick={handleSubmit}>
+               <Button className='cursor-pointer' type="submit" onClick={handleSubmit}>
                  Sign Up
                </Button>
              </div>
