@@ -156,7 +156,7 @@ export default function LoginPage() {
     password: "",
   })
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Clear error messages when user starts typing
     setErrorMessage("")
 
@@ -166,7 +166,7 @@ export default function LoginPage() {
     }))
   }
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     setErrorMessage("")
@@ -183,15 +183,18 @@ export default function LoginPage() {
 
       // Save token to localStorage
       localStorage.setItem("token", res.data.jwtToken)
+      localStorage.setItem("userId", res.data.user._id);
+      const userId = res.data.user._id;
 
       // Redirect after a short delay to allow the user to see the success message
       setTimeout(() => {
-        router.push("/account")
+        // router.push(`/account/${userId}`);
+        router.push("/");
       }, 1500)
-    } catch (err) {
+    } catch (err :unknown) {
       console.error("Login error:", err)
 
-      if (err.response) {
+      if (axios.isAxiosError(err) && err.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         const { status } = err.response
@@ -203,7 +206,7 @@ export default function LoginPage() {
         } else {
           setErrorMessage("An unexpected error occurred. Please try again later.")
         }
-      } else if (err.request) {
+      } else if (axios.isAxiosError(err) && err.request) {
         // The request was made but no response was received
         setErrorMessage("Unable to connect to the server. Please check your internet connection.")
       } else {
