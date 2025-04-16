@@ -127,7 +127,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="col-span-2 place-items-center place-content-center space-y-2 h-screen">
+      <div className="col-span-2 hidden lg:block md:block place-items-center place-content-center space-y-2 h-screen">
         {/* Outer circle */}
         <div className="w-24 h-24 border-2 border-black rounded-full flex items-center justify-center">
           {/* Inner circle */}

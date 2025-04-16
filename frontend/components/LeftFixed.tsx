@@ -66,7 +66,7 @@ export default function LeftFixed({ user }:{user:Iuser}) {
 
   return (
     <div
-      className={`fixed bg-white z-50 h-screen py-6 top-0 left-0 ${
+      className={`fixed bg-white hidden lg:block md:block z-50 h-screen py-6 top-0 left-0 ${
         isMenuOpen ? "w-56" : "w-16"
       } transition-width duration-300 ease-in-out  border-r border-r-gray-200 px-2`}
     >
