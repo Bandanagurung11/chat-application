@@ -48,7 +48,7 @@ export const getUser = async (req, res) => {
 export const getUserById = async (req,res)=>{
     try {
         const user = await User.findById(req.params.id);
-        return res.status(200).json({message:"single user fetch sucessfully", data:user});
+        return res.status(200).json({message:"single user fetch sucessfully",user});
 
     } catch (error) {
         console.log("something went wrong",error);
@@ -96,7 +96,7 @@ export const userLogin = async (req,res)=>{
       //check if username exist or not
       const yesUserNameExit = await User.findOne({username:req.body.username});
       if(!yesUserNameExit){
-        return res.status(404).json({message: "user does not exit"})
+        return res.status(404).json({message: " Oops! It looks like you haven't signed up yet."})
       }
   
       //compare user password if user exist
