@@ -1,7 +1,8 @@
-
+"use client"
 import LeftFixed from "@/components/LeftFixed";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
 import {
   ListFilter,
   MessageSquareHeart,
@@ -9,9 +10,45 @@ import {
   SquarePen,
 } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import { useParams, useRouter } from "next/navigation";
+
+import React, { useEffect, useState } from "react";
 
 export default function Page() {
+
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+  const params = useParams();
+  const userId = params.id;
+
+  const getuser= async()=>{
+    try {
+      const response = await axios.get(`https://chat-application-wl46.onrender.com/users/${userId}`
+    )
+    console.log(response);
+      setUser(response.data);
+    } catch (error) {
+      console.log(error, "somethine went wrong");
+    }
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("your are not log in yet");
+      router.push("/"); // Not logged in, go to login
+      return;
+    }
+    getuser();
+  }, []);
+  // console.log(user?.profile, "user details")
+  console.log(user, "user")
+
+  if (!user) return <div>Loading...</div>;
+   //    {
+      //   headers: { Authorization: `Bearer ${token}` },
+      // }
   
   const friends = [
     {
@@ -47,7 +84,7 @@ export default function Page() {
   ];
   return (
    <div>
-    <LeftFixed/>
+    <LeftFixed user={user}/>
      <div className="lg:ml-16 lg:grid grid-cols-3">
         {/*  */}
       <div className=" pl-2 space-y-6 col-span-1 border-r border-r-gray-200">

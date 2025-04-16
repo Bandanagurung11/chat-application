@@ -183,13 +183,13 @@ export default function LoginPage() {
 
       // Save token to localStorage
       localStorage.setItem("token", res.data.jwtToken)
-      localStorage.setItem("userId", res.data.user._id);
+      // localStorage.setItem("userId", res.data.user._id);
       const userId = res.data.user._id;
 
-      // Redirect after a short delay to allow the user to see the success message
       setTimeout(() => {
-        // router.push(`/account/${userId}`);
-        router.push("/");
+        router.push(`/account/${userId}`);
+        // router.push("/account");
+        // router.push("/");
       }, 1500)
     } catch (err :unknown) {
       console.error("Login error:", err)
@@ -219,8 +219,9 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex mt-12 justify-center items-center min-h-[80vh]">
-      <form onSubmit={handleLogin} className="w-full max-w-md">
+   <div className="bg-gray-100 w-full flex justify-center items-center h-screen">
+     {/* <div className="flex  justify-center items-center "> */}
+      <form onSubmit={handleLogin} className="bg-white rounded-lg z-50 max-w-md">
         <div className="border shadow-xl p-8 rounded-lg space-y-6">
           <div className="space-y-2">
             <h1 className="text-2xl font-bold">Login</h1>
@@ -297,6 +298,8 @@ export default function LoginPage() {
           </p>
         </div>
       </form>
-    </div>
+    {/* </div> */}
+   </div>
+ 
   )
 }
