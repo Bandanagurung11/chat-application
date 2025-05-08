@@ -25,8 +25,8 @@ export default function Page() {
     try {
       const response = await axios.get(`https://chat-application-wl46.onrender.com/users/${userId}`
     )
-    console.log(response);
-      setUser(response.data);
+    console.log(response.data);
+      setUser(response.data.user);
     } catch (error) {
       console.log(error, "somethine went wrong");
     }

@@ -9,7 +9,7 @@ import {
   Star,
 } from "lucide-react";
 import React, { useState } from "react";
-import Setting from "./onClick/Settings";
+// import Setting from "./onClick/Settings";
 import Image from "next/image";
 
 export interface Iuser{
@@ -66,7 +66,8 @@ export default function LeftFixed({ user }:{user:Iuser}) {
 
   return (
     <div
-      className={`fixed bg-white hidden lg:block md:block z-50 h-screen py-6 top-0 left-0 ${
+    // hidden lg:block md:block
+      className={`fixed bg-white  z-50 h-screen py-6 top-0 left-0 ${
         isMenuOpen ? "w-56" : "w-16"
       } transition-width duration-300 ease-in-out  border-r border-r-gray-200 px-2`}
     >
@@ -104,16 +105,17 @@ export default function LeftFixed({ user }:{user:Iuser}) {
             </div>
           ))}
 
-          {user?.profile && (
+          {user && (
             <Image
               src={user.profile}
               alt="user profile"
               height={100}
               width={100}
+              className="h-8 w-8 cursor-pointer rounded-full"
             />
           )}
         </div>
-        {openSetting && <Setting />}
+        {openSetting && <Settings />}
       </div>
     </div>
   );
