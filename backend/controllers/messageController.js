@@ -6,6 +6,7 @@ export const messageCreate = async (req,res)=>{
         await newMessage.save();
         res.status(201).json(newMessage);
       } catch (error) {
+        console.log(error, "something went wrong");
         res.status(500).json({ message: 'Failed to send message', error });
       }
 };
@@ -60,3 +61,75 @@ export const messageGet = async (req,res)=>{
         res.status(500).json("internal server error");
     }
  };
+
+ export const getMessagesForReceiver = async (req, res) => {
+    try {
+      const { receiverId } = req.params;
+      const messages = await Message.find({ receiver: receiverId }).populate('sender receiver');
+      res.status(200).json(messages);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch messages for receiver', error });
+    }
+  };
+
+  export const getConversationBetweenUsers = async (req, res) => {
+    const { user1, user2 } = req.params;
+  
+    try {
+      const messages = await Message.find({
+        $or: [
+          { sender: user1, receiver: user2 },
+          { sender: user2, receiver: user1 }
+        ]
+      }).sort({ timestamp: 1 }) // optional: sort by time
+        .populate('sender receiver');
+  
+      res.status(200).json(messages);
+    } catch (error) {
+      console.error('Error fetching conversation:', error);
+      res.status(500).json({ message: 'Failed to fetch conversation', error });
+    }
+  };
+
+  export const markMessagesAsRead = async (req, res) => {
+    const { senderId, receiverId } = req.params;
+  
+    try {
+      const result = await Message.updateMany(
+        {
+          sender: senderId,
+          receiver: receiverId,
+          isRead: false,
+        },
+        { $set: { isRead: true } }
+      );
+  
+      res.status(200).json({
+        message: 'Messages marked as read',
+        modifiedCount: result.modifiedCount,
+      });
+    } catch (error) {
+      console.error('Error marking messages as read:', error);
+      res.status(500).json({ message: 'Failed to update messages', error });
+    }
+  };
+
+  export const getUnreadMessages = async (req, res) => {
+    const { receiverId } = req.params;
+  
+    try {
+      const messages = await Message.find({
+        receiver: receiverId,
+        isRead: false
+      }).populate('sender', 'username');
+  
+      res.status(200).json({
+        message: 'Unread messages fetched successfully',
+        data: messages
+      });
+    } catch (error) {
+      console.error('Error fetching unread messages:', error);
+      res.status(500).json({ message: 'Failed to fetch unread messages', error });
+    }
+  };
+  
